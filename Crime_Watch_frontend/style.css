@@ -1,4 +1,24 @@
 #mapid {
   height: 800px;
-  margin-right: 50%;
+  float: left;
+  width: 50%;
+  border-radius: 3%;
  }
+
+h1 {
+  text-align: center;
+}
+
+#report-index {
+  height: 800px;
+  float: left;
+  width: 50%;
+  border-radius: 3%;
+  background-color: grey;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
