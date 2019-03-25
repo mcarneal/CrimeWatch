@@ -21,6 +21,14 @@ var circle = L.circle([51.508, -0.11], {
 }).addTo(mymap);
 
 
+var polygon = L.polygon([
+    [51.509, -0.08],
+    [51.503, -0.06],
+    [51.51, -0.047]
+]).addTo(mymap);
 
+
+marker.bindPopup("<b>Hello world!</b><br>I am a popup.")
+circle.bindPopup("<b>I Was Mugged around 2pm</b><br>in this area last night")
 
 });
