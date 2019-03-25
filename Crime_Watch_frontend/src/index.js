@@ -2,6 +2,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
 const POSTURL = 'http://localhost:3000/api/v1/reports'
+// const FETCHURL = 'http://localhost:3000/api/v1/reports'
 
 let lat
 let lng
@@ -19,8 +20,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(mymap);
 
 
-let marker = L.marker([51.5, -0.09]).addTo(mymap);
-
 let circle = L.circle([40.70587193411145,-74.01266098022462], {
     color: 'red',
     fillColor: 'blue',
@@ -36,8 +35,8 @@ let polygon = L.polygon([
 ]).addTo(mymap);
 
 
-marker.bindPopup("<b>Hello world!</b><br>I am a popup.")
-circle.bindPopup("<b>I Was Mugged around 2pm</b><br>in this area last night")
+// marker.bindPopup("<b>Hello world!</b><br>I am a popup.")
+// circle.bindPopup("<b>I Was Mugged around 2pm</b><br>in this area last night")
 
 // marker.on('click', function(ev){
 //   var latlng = mymap.mouseEventToLatLng(ev.originalEvent);
@@ -55,10 +54,27 @@ mymap.on('click', function(e){
 
   submiBtn.addEventListener('click', (e)=>{
     e.preventDefault()
-    console.log(lat, lng, descriptionInput.value)
+    data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: 2}
+    postNewReport(data)
   })
 
+  function fetchReport(){
+    fetch(POSTURL)
+  .then(res => res.json())
+  .then(renderReport)
+  }
 
+
+
+  function renderReport(reports){
+      reports.forEach(report =>{
+        let marker = L.marker([report.lat, report.lng]).addTo(mymap)
+        marker.bindPopup(`${report.description} <br> Please Contact: ${report.user.email}`)
+      })
+  }
+
+
+  fetchReport()
 
   function postNewReport(data ={}){
     fetch(POSTURL,{
@@ -70,7 +86,7 @@ mymap.on('click', function(e){
     })
   }
 
-  postNewReport({lat: 9.1, lng: 10.1, description: "test", user_id: 1 })
+  // postNewReport({lat: 9.1, lng: 10.1, description: "test", user_id: 1 })
 
 
 
