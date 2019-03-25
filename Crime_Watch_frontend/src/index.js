@@ -6,9 +6,12 @@ const POSTURL = 'http://localhost:3000/api/v1/reports'
 
 let lat
 let lng
+let descriptionInput
+let submiBtn
 
-const submiBtn = document.getElementById('submit-btn')
-const descriptionInput = document.getElementById('description-input')
+// const descriptionInput = document.getElementById('description-input')
+const mapDiv = document.getElementById("mapid")
+submiBtn = document.getElementById('submit-btn')
 let inputField = document.getElementById('report-index')
 let mymap = L.map('mapid').setView([40.70547963400777, -74.01334879919888], 13);
 
@@ -43,35 +46,55 @@ let polygon = L.polygon([
 //   console.log(latlng.lat + ', ' + latlng.lng);
 // });
 
-mymap.on('click', function(e){
+let testMarker
+  mymap.on('click', function(e){
   let coord = e.latlng;
    lat = coord.lat;
    lng = coord.lng;
-  console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-  let testMarker = L.marker([lat,lng]).addTo(mymap)
-  testMarker.bindPopup(`My latitue is  ${lat} and my longitude is ${lng}` ).openPopup()
+   if (testMarker){
+      mymap.removeLayer(testMarker)
+   } testMarker = L.marker([lat,lng]).addTo(mymap)
+   testMarker.bindPopup(`<br>description<input type="text" id='description-input'><br>
+   <input type="submit" value="Submit" id='submit-btn'>` ).openPopup()
+   descriptionInput = document.getElementById('description-input')
   });
 
-  submiBtn.addEventListener('click', (e)=>{
-    e.preventDefault()
-    data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: 2}
-    postNewReport(data)
+
+  mapid.addEventListener('click', (e)=>{
+    if (e.target.id === 'submit-btn'){
+      e.preventDefault()
+      data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: 2}
+      postNewReport(data)
+      descriptionInput.value = ''
+      testMarker.closePopup()
+    }
   })
 
-  function fetchReport(){
+
+
+// const addSubmitListener = () => {
+//   submiBtn.addEventListener('click', (e)=>{
+//     e.preventDefault()
+//     data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: 2}
+//     postNewReport(data)
+//     descriptionInput.value = ''
+//   })
+// }
+
+
+  const fetchReport = () => {
     fetch(POSTURL)
-  .then(res => res.json())
-  .then(renderReport)
+    .then(res => res.json())
+    .then(renderReport)
   }
 
-
-
-  function renderReport(reports){
-      reports.forEach(report =>{
-        let marker = L.marker([report.lat, report.lng]).addTo(mymap)
-        marker.bindPopup(`${report.description} <br> Please Contact: ${report.user.email}`)
-      })
+  const renderReport = (reports) => {
+    reports.forEach(report => {
+      let marker = L.marker([report.lat, report.lng]).addTo(mymap)
+      marker.bindPopup(`${report.description} <br> Please Contact: ${report.user.email}`)
+    })
   }
+
 
 
   fetchReport()
