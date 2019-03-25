@@ -1,5 +1,13 @@
 window.addEventListener('DOMContentLoaded', (event) => {
 
+
+const POSTURL = 'http://localhost:3000/api/v1/reports'
+
+let lat
+let lng
+
+const submiBtn = document.getElementById('submit-btn')
+const descriptionInput = document.getElementById('description-input')
 let inputField = document.getElementById('report-index')
 let mymap = L.map('mapid').setView([40.70547963400777, -74.01334879919888], 13);
 
@@ -11,9 +19,9 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(mymap);
 
 
-var marker = L.marker([51.5, -0.09]).addTo(mymap);
+let marker = L.marker([51.5, -0.09]).addTo(mymap);
 
-var circle = L.circle([40.70587193411145,-74.01266098022462], {
+let circle = L.circle([40.70587193411145,-74.01266098022462], {
     color: 'red',
     fillColor: 'blue',
     fillOpacity: .3,
@@ -21,7 +29,7 @@ var circle = L.circle([40.70587193411145,-74.01266098022462], {
 }).addTo(mymap);
 
 
-var polygon = L.polygon([
+let polygon = L.polygon([
     [40.72707989466791, -74.0028762817383],
     [40.719534278094905, -74.00545120239259],
     [40.72369748267996, -73.99257659912111]
@@ -37,13 +45,33 @@ circle.bindPopup("<b>I Was Mugged around 2pm</b><br>in this area last night")
 // });
 
 mymap.on('click', function(e){
-  var coord = e.latlng;
-  var lat = coord.lat;
-  var lng = coord.lng;
+  let coord = e.latlng;
+   lat = coord.lat;
+   lng = coord.lng;
   console.log("You clicked the map at latitude: " + lat + " and longitude: " + lng);
-  var testMarker = L.marker([lat,lng]).addTo(mymap)
+  let testMarker = L.marker([lat,lng]).addTo(mymap)
   testMarker.bindPopup(`My latitue is  ${lat} and my longitude is ${lng}` ).openPopup()
-  inputField.innerHTML+= `<p>Crime reported at the following coordniates: latitude: ${lat} longitude:${lng}</p>`
   });
+
+  submiBtn.addEventListener('click', (e)=>{
+    e.preventDefault()
+    console.log(lat, lng, descriptionInput.value)
+  })
+
+
+
+  function postNewReport(data ={}){
+    fetch(POSTURL,{
+      method: 'POST',
+      headers: {
+            "Content-Type": "application/json"
+        },
+      body: JSON.stringify(data)
+    })
+  }
+
+  postNewReport({lat: 9.1, lng: 10.1, description: "test", user_id: 1 })
+
+
 
 });
