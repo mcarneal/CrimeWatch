@@ -8,6 +8,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const USERURL = 'http://localhost:3000/api/v1/users'
     const loginDiv = document.querySelector(".login")
     const welcomeBanner = document.getElementById('welcome-banner')
+    let reportIndexDiv = document.createElement('div')
     const createElement = (e) => {
       return document.createElement(e)
     }
@@ -22,10 +23,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     loginBtn.addEventListener("click", (e)=>{
-      USERNAME = {email: loginField.value}
-      createUser(USERNAME)
-      loginDiv.innerHTML = ''
-      loadUserInterface()
+      const regexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      if (regexp.test(loginField.value)) {
+        USERNAME = {email: loginField.value}
+        createUser(USERNAME)
+        loginDiv.innerHTML = ''
+        loadUserInterface()
+      } else {
+          alert("You have entered an invalid email address!")
+      }
     })
 
 
@@ -43,9 +49,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const loadUserInterface = () => {
-    const row = document.querySelector(".row")
+  const row = document.querySelector(".row")
     const reportIndexDiv = document.createElement('div')
     reportIndexDiv.id = 'report-index'
+    const reportDivUl = document.createElement("ul")
+    reportDivUl.id = 'report-ul'
+    reportIndexDiv.appendChild(reportDivUl)
     row.appendChild(reportIndexDiv)
     const POSTURL = 'http://localhost:3000/api/v1/reports'
     const mapDiv = document.getElementById("mapid")
@@ -91,7 +100,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
      <input type="submit" value="Submit" id='submit-btn'>` ).openPopup()
      descriptionInput = document.getElementById('description-input')
      fetchReport()
-    });
+   })
 
 
     const fetchReport = () => {
@@ -131,11 +140,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
       })
     }
 
-    fetchUserID()
 
 
     fetchReport()
 
+    fetchUserID()
 
     mapid.addEventListener('click', (e)=>{
       if (e.target.id === 'submit-btn'){
@@ -147,10 +156,43 @@ window.addEventListener('DOMContentLoaded', (event) => {
       }
     })
 
+  // }
+
+
+  const loadReports = (element) => {
+    fetch('http://localhost:3000/api/v1/reports')
+    .then(res => res.json())
+    .then(json => renderReportToUi(json, element))
+  }
+
+  const renderReportToUi = (reports, element) => {
+
+    reports.forEach(report => {
+      const reportBtn = document.createElement("button")
+      reportBtn.id = report.id
+      reportBtn.innerText = 'See More Details...'
+      reportBtn.className = 'detailsBtn'
+
+      let reportLi = document.createElement('li')
+      reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
+        element.appendChild(reportLi)
+        element.append(reportBtn)
+    })
   }
 
 
+  reportIndexDiv.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      console.log('hi');
+    }
+  })
 
+
+  loadReports(reportDivUl)
+
+
+/// load user interface ends right here!!!!!!!!!!!!!!!!!!!!!
+}
 
 loadLoginInterface()
 });
