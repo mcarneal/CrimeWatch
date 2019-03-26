@@ -2,6 +2,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   let USERNAME
   let USERID
+  let REPORTID
 
   const loadLoginInterface = () => {
     // start of loadinterface
@@ -117,7 +118,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     const postNewReport = (data) => {
-      fetch(POSTURL,{
+      return fetch(POSTURL,{
         method: 'POST',
         headers: {
               "Content-Type": "application/json"
@@ -125,6 +126,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         body: JSON.stringify(data)
       })
     }
+
+    // const optomisticAddToReportIndex = (data) => {
+    //   console.log(data)
+    // }
 
     const fetchUserID = () => {
       fetch('http://localhost:3000/api/v1/users')
@@ -151,16 +156,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
         e.preventDefault()
         data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: parseInt(USERID)}
         postNewReport(data)
-        descriptionInput.value = ''
+        let reportLi = document.createElement('li')
+        reportLi.innerText= `${descriptionInput.value} was reported by: ${USERNAME.email}`
+        reportDivUl.appendChild(reportLi)
         testMarker.closePopup()
+        console.log(reportDivUl)
+        descriptionInput.value = ''
       }
     })
 
-  // }
-
 
   const loadReports = (element) => {
-    fetch('http://localhost:3000/api/v1/reports')
+    element.innerHTML = ''
+    return fetch('http://localhost:3000/api/v1/reports')
     .then(res => res.json())
     .then(json => renderReportToUi(json, element))
   }
@@ -183,12 +191,47 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   reportIndexDiv.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
-      console.log('hi');
+     let reportId = parseInt(e.target.id)
+     fetchOneReport(reportId)
     }
   })
 
+  // functions for grabbing a single report from the UL div
+  const fetchOneReport = (id) => {
+    fetch('http://localhost:3000/api/v1/reports')
+    .then(res => res.json())
+    .then(json => findOneReport(json, id))
+  }
+
+  const findOneReport = (reports, id) => {
+    reports.forEach(report => {
+      if(report.id === id){
+        console.log(report.description)
+        renderOneReport(report)
+      }
+    })
+  }
+
+  const renderOneReport = (report) => {
+    const container = document.getElementById('report-ul')
+    container.innerHTML = ''
+    const backBtn = document.createElement('button')
+    backBtn.innerText = 'Back'
+    container.appendChild(backBtn)
+    console.log(container)
+  }
+
+  // end of single fetch area
+
+
 
   loadReports(reportDivUl)
+
+  reportIndexDiv.addEventListener("click", (e) => {
+    if (e.target.innerText === 'Back'){
+      loadReports(reportDivUl)
+    }
+  })
 
 
 /// load user interface ends right here!!!!!!!!!!!!!!!!!!!!!

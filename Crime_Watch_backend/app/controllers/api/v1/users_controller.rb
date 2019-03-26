@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(email: params['email'])
+    @user = User.find_or_create_by(email: params['email'])
     render json: @user
   end
 
