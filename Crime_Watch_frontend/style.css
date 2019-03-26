@@ -9,6 +9,10 @@ h1 {
   text-align: center;
 }
 
+#back-button {
+  float: left;
+  margin-top: 50%;
+}
 
 
 #report-index {

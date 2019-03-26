@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   let USERID
   let REPORTID
   let NEWREPORTID
+  let NEWCOMMENT
 
   const loadLoginInterface = () => {
     // start of loadinterface
@@ -74,26 +75,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         accessToken: 'pk.eyJ1IjoibWNhcm5lYWwiLCJhIjoiY2p0b2djYmliMWk2dTQ5azZyOGI0bDUzbSJ9.zkhBCYrFE03PBOMS3pVY_w'
     }).addTo(mymap);
 
-    //
-    // let circle = L.circle([40.70587193411145,-74.01266098022462], {
-    //     color: 'red',
-    //     fillColor: 'blue',
-    //     fillOpacity: .3,
-    //     radius: 500
-    // }).addTo(mymap);
-    //
-    //
-    // fetch(POSTURL)
-    // .then(res => res.json())
-    // .then(reports => {
-    //   reports.
-    // let polygon = L.polygon([
-    //     [40.72707989466791, -74.0028762817383],
-    //     [40.719534278094905, -74.00545120239259],
-    //     [40.72369748267996, -73.99257659912111]
-    // ]).addTo(mymap);
-    //
-
 
     mymap.on('click', function(e){
     let coord = e.latlng;
@@ -132,9 +113,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
       }).then()
     }
 
-    // const optomisticAddToReportIndex = (data) => {
-    //   console.log(data)
-    // }
 
     const fetchUserID = () => {
       fetch('http://localhost:3000/api/v1/users')
@@ -221,8 +199,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   reportIndexDiv.addEventListener('click', (e) => {
     if (e.target.className === 'detailsBtn') {
+      console.log(e.target.id)
      let reportId = parseInt(e.target.id)
      fetchOneReport(reportId)
+
     }
   })
 
@@ -236,23 +216,87 @@ window.addEventListener('DOMContentLoaded', (event) => {
   const findOneReport = (reports, id) => {
     reports.forEach(report => {
       if(report.id === id){
-        console.log(report.description)
         renderOneReport(report)
       }
     })
   }
 
   const renderOneReport = (report) => {
+
     const container = document.getElementById('report-ul')
     container.innerHTML = ''
     const backBtn = document.createElement('button')
     backBtn.innerText = 'Back'
+    backBtn.id = 'back-button'
+    const showDiv = document.createElement('div')
+    showDiv.innerHTML = `
+    <h4>Description: ${report.description}</h4>
+    <a>Contact: ${report.user.email}</a><br><br>
+    Add Comment:
+    `
+    const textFieldInput = document.createElement('textarea')
+    textFieldInput.id = 'textarea'
+    const commentDiv = document.createElement('div')
+    const commentsUl = document.createElement('ul')
+    commentsUl.id = 'commentUl'
+    const submitCommentBtn = document.createElement('button')
+    submitCommentBtn.innerText = 'Submit Comment'
+
+    container.append(showDiv)
+    container.append(textFieldInput)
+    container.append(submitCommentBtn)
+
     container.appendChild(backBtn)
-    console.log(container)
+    commentDiv.append(commentsUl)
+    container.append(commentDiv)
+
+
+    report.comments.forEach(comment => {
+      console.log(comment)
+      commentLi = document.createElement('li')
+      commentLi.innerText= comment.comment
+      commentsUl.appendChild(commentLi)
+    })
+
+
+    REPORTID = report.id
   }
 
   // end of single fetch area
 
+reportIndexDiv.addEventListener("click", (e)=> {
+  if (e.target.innerText === 'Submit Comment'){
+    parentNode = e.target.parentNode
+    console.log(parentNode)
+    newComment = parentNode.querySelector('#textarea')
+    console.log(USERID, REPORTID, newComment.value)
+    newCommentPost = {comment: newComment.value, user_id: USERID, report_id: REPORTID}
+    postComment(newCommentPost)
+    const commentUl = document.getElementById('commentUl')
+    parentNode.appendChild(commentUl)
+    commentLi = document.createElement('li')
+    commentLi.innerText= newComment.value
+    commentUl.appendChild(commentLi)
+    newComment.value = ''
+  }
+})
+
+
+  // event instener to send a post request for a new comment
+
+
+
+
+  const postComment = (data) => {
+    fetch('http://localhost:3000/api/v1/comments', {
+      method: 'POST',
+      headers: {
+            "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      // .then()
+  }
 
 
   loadReports(reportDivUl)
