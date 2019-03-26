@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   let USERNAME
   let USERID
   let REPORTID
+  let NEWREPORTID
 
   const loadLoginInterface = () => {
     // start of loadinterface
@@ -73,21 +74,25 @@ window.addEventListener('DOMContentLoaded', (event) => {
         accessToken: 'pk.eyJ1IjoibWNhcm5lYWwiLCJhIjoiY2p0b2djYmliMWk2dTQ5azZyOGI0bDUzbSJ9.zkhBCYrFE03PBOMS3pVY_w'
     }).addTo(mymap);
 
-
-    let circle = L.circle([40.70587193411145,-74.01266098022462], {
-        color: 'red',
-        fillColor: 'blue',
-        fillOpacity: .3,
-        radius: 500
-    }).addTo(mymap);
-
-
-    let polygon = L.polygon([
-        [40.72707989466791, -74.0028762817383],
-        [40.719534278094905, -74.00545120239259],
-        [40.72369748267996, -73.99257659912111]
-    ]).addTo(mymap);
-
+    //
+    // let circle = L.circle([40.70587193411145,-74.01266098022462], {
+    //     color: 'red',
+    //     fillColor: 'blue',
+    //     fillOpacity: .3,
+    //     radius: 500
+    // }).addTo(mymap);
+    //
+    //
+    // fetch(POSTURL)
+    // .then(res => res.json())
+    // .then(reports => {
+    //   reports.
+    // let polygon = L.polygon([
+    //     [40.72707989466791, -74.0028762817383],
+    //     [40.719534278094905, -74.00545120239259],
+    //     [40.72369748267996, -73.99257659912111]
+    // ]).addTo(mymap);
+    //
 
 
     mymap.on('click', function(e){
@@ -124,7 +129,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
               "Content-Type": "application/json"
           },
         body: JSON.stringify(data)
-      })
+      }).then()
     }
 
     // const optomisticAddToReportIndex = (data) => {
@@ -153,17 +158,44 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     mapid.addEventListener('click', (e)=>{
       if (e.target.id === 'submit-btn'){
+        fetchLastReport()
         e.preventDefault()
         data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: parseInt(USERID)}
         postNewReport(data)
-        let reportLi = document.createElement('li')
-        reportLi.innerText= `${descriptionInput.value} was reported by: ${USERNAME.email}`
-        reportDivUl.appendChild(reportLi)
+        // let reportLi = document.createElement('li')
+        // reportLi.innerText= `${descriptionInput.value} was reported by: ${USERNAME.email}`
+        // reportDivUl.appendChild(reportLi)
         testMarker.closePopup()
-        console.log(reportDivUl)
+        // loadReports(reportDivUl)
+        appendNewReport(descriptionInput, reportDivUl)
         descriptionInput.value = ''
-      }
+        }
+
     })
+
+  const appendNewReport = (descriptionInput, reportDivUl) => {
+    const reportBtn = document.createElement("button")
+    reportBtn.id = NEWREPORTID
+    reportBtn.innerText = 'See More Details...'
+    reportBtn.className = 'detailsBtn'
+    let reportLi = document.createElement('li')
+    reportLi.innerText= `${descriptionInput.value} was reported by: ${USERNAME.email}`
+    reportDivUl.appendChild(reportLi)
+    reportDivUl.appendChild(reportBtn)
+  }
+
+  const fetchLastReport = () =>{
+    fetch('http://localhost:3000/api/v1/reports')
+    .then(res => res.json())
+    .then(json => findLastReport(json.slice(-1)))
+  }
+
+
+  const findLastReport = (report) => {
+    NEWREPORTID = report[0].id + 1
+    console.log(report[0].id, 'is the latest report ID')
+    console.log(NEWREPORTID, 'is the soon to be report')
+  }
 
 
   const loadReports = (element) => {
@@ -174,13 +206,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const renderReportToUi = (reports, element) => {
-
     reports.forEach(report => {
       const reportBtn = document.createElement("button")
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
       reportBtn.className = 'detailsBtn'
-
       let reportLi = document.createElement('li')
       reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
         element.appendChild(reportLi)
@@ -190,7 +220,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
   reportIndexDiv.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') {
+    if (e.target.className === 'detailsBtn') {
      let reportId = parseInt(e.target.id)
      fetchOneReport(reportId)
     }
