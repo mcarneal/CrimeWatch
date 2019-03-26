@@ -9,6 +9,8 @@ h1 {
   text-align: center;
 }
 
+
+
 #report-index {
   height: 800px;
   float: left;
@@ -21,4 +23,19 @@ h1 {
   content: "";
   display: table;
   clear: both;
+}
+
+#login-field {
+  margin-left: 46.5%;
+  margin-right:46%;
+  padding: 10px;
+}
+
+#login-btn{
+  margin-left: 49%;
+  margin-right:50%;
+  margin-top: 20px;
+  padding: 10px;
+
+
 }

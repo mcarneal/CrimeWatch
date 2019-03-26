@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
 
   has_many :reports
-  attributes :email
+  attributes :id, :email
 
 end
