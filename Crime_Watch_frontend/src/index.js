@@ -1,10 +1,23 @@
 window.addEventListener('DOMContentLoaded', (event) => {
 
+  let USEROBJECT
   let USERNAME
   let USERID
   let REPORTID
   let NEWREPORTID
   let NEWCOMMENT
+  let USERREPORTIDS = []
+
+
+
+  const findReportIds = (reports) => {
+    reports.forEach(report => {
+      USERREPORTIDS.push(report.id)
+    })
+    console.log(USERREPORTIDS)
+    return USERREPORTIDS
+  }
+
 
   const loadLoginInterface = () => {
     // start of loadinterface
@@ -124,6 +137,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       users.forEach(user => {
         if (user.email === USERNAME.email){
           USERID = user.id
+          USEROBJECT = user
         }
       })
     }
@@ -184,8 +198,30 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const renderReportToUi = (reports, element) => {
+    console.log(USERREPORTIDS)
     reports.forEach(report => {
+      console.log(USERID, report.user.id)
+      if (USERID === report.user.id){
       const reportBtn = document.createElement("button")
+      const deleteBtn = document.createElement("button")
+      deleteBtn.innerText = "Delete"
+      deleteBtn.className = 'delete-btn'
+      deleteBtn.id = report.id
+      reportBtn.id = report.id
+      reportBtn.innerText = 'See More Details...'
+      reportBtn.className = 'detailsBtn'
+      let reportLi = document.createElement('li')
+      reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
+      // let break = document.createElement('br')
+        element.appendChild(reportLi)
+        reportLi.innerHTML+=`<br>`
+        reportLi.append(reportBtn)
+        // reportLi.append(break)
+        reportLi.innerHTML+=`<br>`
+        reportLi.append(deleteBtn)
+    } else {
+      const reportBtn = document.createElement("button")
+
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
       reportBtn.className = 'detailsBtn'
@@ -193,13 +229,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
         element.appendChild(reportLi)
         element.append(reportBtn)
+
+}
     })
   }
 
 
   reportIndexDiv.addEventListener('click', (e) => {
     if (e.target.className === 'detailsBtn') {
-      console.log(e.target.id)
      let reportId = parseInt(e.target.id)
      fetchOneReport(reportId)
 
@@ -307,6 +344,31 @@ reportIndexDiv.addEventListener("click", (e)=> {
     }
   })
 
+
+
+
+  reportIndexDiv.addEventListener('click', (e) => {
+    if(e.target.innerText === 'Delete'){
+        console.log(e.target.parentNode)
+        let child = e.target
+        let parent = e.target.parentNode
+        let id = parseInt(e.target.id)
+        deleteReport(id)
+        parent.remove(child)
+
+    }
+  })
+
+
+  const deleteReport = (id) => {
+    fetch(`http://localhost:3000/api/v1/reports/${id}`,{
+      method: 'DELETE'
+    } )
+  }
+
+
+
+// findReportIds(USEROBJECT.reports)
 
 /// load user interface ends right here!!!!!!!!!!!!!!!!!!!!!
 }

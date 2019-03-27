@@ -29,7 +29,8 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   def destroy
-
+    @report = Report.find(params['id'])
+    @report.destroy
   end
 
 
