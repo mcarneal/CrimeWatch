@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   let NEWREPORTID
   let NEWCOMMENT
   let USERREPORTIDS = []
+  const uiCardsDiv = document.createElement('div')
 
 
 
@@ -154,11 +155,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         e.preventDefault()
         data = {lat: lat, lng: lng, description: descriptionInput.value, user_id: parseInt(USERID)}
         postNewReport(data)
-        // let reportLi = document.createElement('li')
-        // reportLi.innerText= `${descriptionInput.value} was reported by: ${USERNAME.email}`
-        // reportDivUl.appendChild(reportLi)
         testMarker.closePopup()
-        // loadReports(reportDivUl)
         appendNewReport(descriptionInput, reportDivUl)
         descriptionInput.value = ''
         }
@@ -204,12 +201,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const renderReportToUi = (reports, element) => {
-    console.log(USERREPORTIDS)
+    const uiCardsDiv = document.createElement('div')
+    console.log(uiCardsDiv)
+    uiCardsDiv.className = "ui cards"
+    element.append(uiCardsDiv)
     reports.forEach(report => {
-      console.log(USERID, report.user.id)
+      console.log(uiCardsDiv)
       if (USERID === report.user.id){
       const reportBtn = document.createElement("button")
       const deleteBtn = document.createElement("button")
+      const userListDiv = document.createElement("div")
+
+      userListDiv.className = 'reportDiv'
       deleteBtn.innerText = "Delete"
       deleteBtn.className = 'delete-btn'
       deleteBtn.id = report.id
@@ -217,25 +220,70 @@ window.addEventListener('DOMContentLoaded', (event) => {
       reportBtn.innerText = 'See More Details...'
       reportBtn.className = 'detailsBtn'
       let reportLi = document.createElement('li')
-      reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
-      // let break = document.createElement('br')
-        element.appendChild(reportLi)
-        reportLi.innerHTML+=`<br>`
-        reportLi.append(reportBtn)
-        // reportLi.append(break)
-        reportLi.innerHTML+=`<br>`
-        reportLi.append(deleteBtn)
-    } else {
-      const reportBtn = document.createElement("button")
+      // reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
 
+      // const uiCardsDiv = document.createElement('div')
+      // uiCardsDiv.className = "ui cards"
+      // element.append(uiCardsDiv)
+      uiCardsDiv.innerHTML +=
+      `
+        <div class="card">
+          <div class="content">
+          <div class="header">${report.user.email}</div>
+          <div class="description">
+          ${report.description}
+          </div>
+        </div>
+        <div class="ui bottom attached button">
+          <button id=${report.id} class='detailsBtn'>See More Details...</button>
+          <button id=${report.id} class='delete-btn'>Delete</button>
+        </div>
+        </div>
+      `
+        // element.appendChild(reportLi)
+        // reportLi.innerHTML+=`<br>`
+        // reportLi.append(reportBtn)
+        // reportLi.innerHTML+=`<br>`
+        // reportLi.append(deleteBtn)
+        // userListDiv.append(reportLi)
+        // element.append(userListDiv)
+    } else {
+      console.log(uiCardsDiv)
+      const reportBtn = document.createElement("button")
+      // const userListDiv = document.createElement("div")
+      // userListDiv.className = 'reportDiv'
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
       reportBtn.className = 'detailsBtn'
-      let reportLi = document.createElement('li')
-      reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
-        element.appendChild(reportLi)
-        element.append(reportBtn)
+      // let reportLi = document.createElement('li')
+      // reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
+      // const uiCardsDiv = document.createElement('div')
+      // uiCardsDiv.className = "ui cards"
+      // element.append(uiCardsDiv)
+      uiCardsDiv.innerHTML +=
+      `
+        <div class="card">
+          <div class="content">
+          <div class="header">${report.user.email}</div>
+          <div class="description">
+          ${report.description}
+          </div>
+        </div>
+        <div class="ui bottom attached button">
+          <button id=${report.id} class='detailsBtn'>See More Details...</button>
+          </div>
+        </div>
+      `
+      // `
+      // <div>
+      //   <h2>TEST</h2>
+      // </div>
+      // `
 
+        // element.appendChild(reportLi)
+        // reportLi.append(reportBtn)
+        // userListDiv.append(reportLi)
+        // element.append(userListDiv)
 }
     })
   }
@@ -337,7 +385,6 @@ reportIndexDiv.addEventListener("click", (e)=> {
       },
       body: JSON.stringify(data)
     })
-      // .then()
   }
 
 
@@ -354,9 +401,9 @@ reportIndexDiv.addEventListener("click", (e)=> {
 
   reportIndexDiv.addEventListener('click', (e) => {
     if(e.target.innerText === 'Delete'){
-        console.log(e.target.parentNode)
+        console.log(e.target.parentNode.parentNode)
         let child = e.target
-        let parent = e.target.parentNode
+        let parent = e.target.parentNode.parentNode
         let id = parseInt(e.target.id)
         deleteReport(id)
         parent.remove(child)
