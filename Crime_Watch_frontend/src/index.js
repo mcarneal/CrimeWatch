@@ -42,17 +42,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
       const regexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
       if (regexp.test(loginField.value)) {
         USERNAME = {email: loginField.value}
-        createUser(USERNAME)
         loginDiv.innerHTML = ''
-        loadUserInterface()
+        createUser(USERNAME).then(()=> loadUserInterface())
       } else {
           alert("You have entered an invalid email address!")
       }
     })
 
 
+
     const createUser = (id) => {
-      fetch(USERURL,{
+        return fetch(USERURL,{
         method: 'POST',
         headers: {
               "Content-Type": "application/json"
@@ -166,7 +166,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     })
 
   const appendNewReport = (descriptionInput, reportDivUl) => {
+    console.log(NEWREPORTID)
     const reportBtn = document.createElement("button")
+    const deleteBtn = document.createElement("button")
+    deleteBtn.id = NEWREPORTID
+    deleteBtn.className = 'delete-btn'
+    deleteBtn.innerText = 'Delete'
     reportBtn.id = NEWREPORTID
     reportBtn.innerText = 'See More Details...'
     reportBtn.className = 'detailsBtn'
@@ -174,6 +179,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     reportLi.innerText= `${descriptionInput.value} was reported by: ${USERNAME.email}`
     reportDivUl.appendChild(reportLi)
     reportDivUl.appendChild(reportBtn)
+    reportDivUl.appendChild(deleteBtn)
+    loadReports(reportDivUl)
   }
 
   const fetchLastReport = () =>{
@@ -188,7 +195,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     console.log(report[0].id, 'is the latest report ID')
     console.log(NEWREPORTID, 'is the soon to be report')
   }
-
 
   const loadReports = (element) => {
     element.innerHTML = ''
@@ -233,7 +239,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 }
     })
   }
-
 
   reportIndexDiv.addEventListener('click', (e) => {
     if (e.target.className === 'detailsBtn') {
