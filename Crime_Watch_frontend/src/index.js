@@ -126,6 +126,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const renderReport = (reports) => {
       reports.forEach(report => {
         let marker = L.marker([report.lat, report.lng]).addTo(mymap)
+        marker._icon.id = report.id
         marker.bindPopup(`${report.description} <br> Please Contact: ${report.user.email}`)
       })
     }
@@ -218,7 +219,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     uiCardsDiv.className = "ui cards"
     element.append(uiCardsDiv)
     reports.forEach(report => {
-      console.log(uiCardsDiv)
       if (USERID === report.user.id){
       const reportBtn = document.createElement("button")
       const deleteBtn = document.createElement("button")
@@ -239,14 +239,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // element.append(uiCardsDiv)
       uiCardsDiv.innerHTML +=
       `
-        <div class="card">
-          <div class="content">
-          <div class="header">${report.user.email}</div>
-          <div class="description">
+        <div class="card" id=${report.id}>
+          <div class="content" id=${report.id}>
+          <div class="header" id=${report.id}>${report.user.email}</div>
+          <div class="description" id=${report.id}>
           ${report.description}
           </div>
         </div>
-        <div class="ui bottom attached button">
+        <div class="ui bottom attached button" id=${report.id}>
           <button id=${report.id} class='detailsBtn'>See More Details...</button>
           <button id=${report.id} class='delete-btn'>Delete</button>
         </div>
@@ -260,7 +260,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         // userListDiv.append(reportLi)
         // element.append(userListDiv)
     } else {
-      console.log(uiCardsDiv)
       const reportBtn = document.createElement("button")
       // const userListDiv = document.createElement("div")
       // userListDiv.className = 'reportDiv'
@@ -274,14 +273,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // element.append(uiCardsDiv)
       uiCardsDiv.innerHTML +=
       `
-        <div class="card">
-          <div class="content">
-          <div class="header">${report.user.email}</div>
-          <div class="description">
+        <div class="card" id=${report.id}>
+          <div class="content" id=${report.id}>
+          <div class="header" id=${report.id}>${report.user.email}</div>
+          <div class="description" id=${report.id}>
           ${report.description}
           </div>
         </div>
-        <div class="ui bottom attached button">
+        <div class="ui bottom attached button" id=${report.id}>
           <button id=${report.id} class='detailsBtn'>See More Details...</button>
           </div>
         </div>
@@ -305,6 +304,20 @@ window.addEventListener('DOMContentLoaded', (event) => {
   // const loadTen = () => {
   //
   // }
+
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.parentNode.className === 'card' || e.target.parentNode.className === 'content') {
+      const icon = document.getElementById(e.target.id)
+      icon.src = 'https://i.pinimg.com/originals/d9/7f/ea/d97feac57bebf6007994f6a6286d005b.png';
+      console.log(icon.style);
+      e.target.addEventListener('mouseleave', (e) => {
+          const icon = document.getElementById(e.target.id)
+          icon.src = 'https://i.imgur.com/WANnswn.png';
+
+    })
+    }
+  })
+
 
 
   reportIndexDiv.addEventListener('click', (e) => {
