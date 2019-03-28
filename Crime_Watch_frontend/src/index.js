@@ -126,7 +126,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const renderReport = (reports) => {
       reports.forEach(report => {
         let marker = L.marker([report.lat, report.lng]).addTo(mymap)
-        marker._icon.id = report.id
         marker.bindPopup(`${report.description} <br> Please Contact: ${report.user.email}`)
       })
     }
@@ -219,6 +218,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     uiCardsDiv.className = "ui cards"
     element.append(uiCardsDiv)
     reports.forEach(report => {
+      console.log(uiCardsDiv)
       if (USERID === report.user.id){
       const reportBtn = document.createElement("button")
       const deleteBtn = document.createElement("button")
@@ -239,14 +239,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // element.append(uiCardsDiv)
       uiCardsDiv.innerHTML +=
       `
-        <div class="card" id=${report.id}>
-          <div class="content" id=${report.id}>
-          <div class="header" id=${report.id}>${report.user.email}</div>
-          <div class="description" id=${report.id}>
+        <div class="card">
+          <div class="content">
+          <div class="header">${report.user.email}</div>
+          <div class="description">
           ${report.description}
           </div>
         </div>
-        <div class="ui bottom attached button" id=${report.id}>
+        <div class="ui bottom attached button">
           <button id=${report.id} class='detailsBtn'>See More Details...</button>
           <button id=${report.id} class='delete-btn'>Delete</button>
         </div>
@@ -260,6 +260,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         // userListDiv.append(reportLi)
         // element.append(userListDiv)
     } else {
+      console.log(uiCardsDiv)
       const reportBtn = document.createElement("button")
       // const userListDiv = document.createElement("div")
       // userListDiv.className = 'reportDiv'
@@ -273,14 +274,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // element.append(uiCardsDiv)
       uiCardsDiv.innerHTML +=
       `
-        <div class="card" id=${report.id}>
-          <div class="content" id=${report.id}>
-          <div class="header" id=${report.id}>${report.user.email}</div>
-          <div class="description" id=${report.id}>
+        <div class="card">
+          <div class="content">
+          <div class="header">${report.user.email}</div>
+          <div class="description">
           ${report.description}
           </div>
         </div>
-        <div class="ui bottom attached button" id=${report.id}>
+        <div class="ui bottom attached button">
           <button id=${report.id} class='detailsBtn'>See More Details...</button>
           </div>
         </div>
@@ -304,20 +305,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
   // const loadTen = () => {
   //
   // }
-
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.parentNode.className === 'card' || e.target.parentNode.className === 'content') {
-      const icon = document.getElementById(e.target.id)
-      icon.src = 'https://i.pinimg.com/originals/d9/7f/ea/d97feac57bebf6007994f6a6286d005b.png';
-      console.log(icon.style);
-      e.target.addEventListener('mouseleave', (e) => {
-          const icon = document.getElementById(e.target.id)
-          icon.src = 'https://i.imgur.com/WANnswn.png';
-
-    })
-    }
-  })
-
 
 
   reportIndexDiv.addEventListener('click', (e) => {
@@ -363,60 +350,102 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const renderOneReport = (report) => {
-
+    REPORTID = report.id
     const container = document.getElementById('report-ul')
     container.innerHTML = ''
-    const backBtn = document.createElement('button')
-    backBtn.innerText = 'Back'
-    backBtn.id = 'back-button'
-    const showDiv = document.createElement('div')
-    showDiv.innerHTML = `
-    <h4>Description: ${report.description}</h4>
-    <p>Contact: <a href="mailto:${report.user.email}">${report.user.email}</a></p><br><br>
-    Add Comment:
+
+    const descriptionContainer = document.createElement('div')
+    descriptionContainer.className = 'report-description'
+    descriptionContainer.innerHTML = `
+      <h2>Description:</h2>
+      <p>${report.description} ... was reported by: ${report.user.email}</p>
     `
-    const textFieldInput = document.createElement('textarea')
-    textFieldInput.id = 'textarea'
-    const commentDiv = document.createElement('div')
-    const commentsUl = document.createElement('ul')
-    commentsUl.id = 'commentUl'
-    const submitCommentBtn = document.createElement('button')
-    submitCommentBtn.innerText = 'Submit Comment'
+    container.append(descriptionContainer)
 
-    container.append(showDiv)
-    container.append(textFieldInput)
-    container.append(submitCommentBtn)
-
-    container.appendChild(backBtn)
-    commentDiv.append(commentsUl)
-    container.append(commentDiv)
-
+    // comments and reply section
+    const uiCommentsDiv = document.createElement('div')
+    uiCommentsDiv.className = 'ui comments'
+    container.append(uiCommentsDiv)
+    const uiDividingHeader = document.createElement('h3')
+    uiDividingHeader.className = 'ui dividing header'
+    uiDividingHeader.innerText = 'Comments'
+    uiCommentsDiv.append(uiDividingHeader)
 
     report.comments.forEach(comment => {
-      commentLi = document.createElement('li')
-      commentLi.innerText= comment.comment
-      commentsUl.appendChild(commentLi)
+      const commentDiv = document.createElement('div')
+      commentDiv.className = 'comment'
+      uiCommentsDiv.appendChild(commentDiv)
+      const avatar = document.createElement('a')
+      avatar.className = 'avatar'
+      commentDiv.append(avatar)
+      const content = document.createElement('div')
+      content.className = 'content'
+      commentDiv.append(content)
+      const author = document.createElement('a')
+      author.className = 'author'
+      author.innerText = `${comment.user_email}`
+      content.append(author)
+      const metaDataDiv = document.createElement('div')
+      metaDataDiv.className = 'metadata'
+      const dateSpan = document.createElement('span')
+      dateSpan.className = 'data'
+      dateSpan.innerText = `${Date()}`
+      metaDataDiv.appendChild(dateSpan)
+      content.append(metaDataDiv)
+      const text = document.createElement('div')
+      text.className='text'
+      text.innerText =`${comment.comment}`
+      content.append(text)
     })
 
+    const uiReplyForm = document.createElement('div')
+    uiReplyForm.className = 'ui reply form'
+    uiCommentsDiv.append(uiReplyForm)
 
-    REPORTID = report.id
+    const field = document.createElement('div')
+    field.className = 'field'
+    field.innerHTML = `<textarea>add a comment...`
+    uiReplyForm.append(field)
+
+    const replyBtn = document.createElement('div')
+    replyBtn.className = 'ui blue labeled submit icon button'
+    replyBtn.innerHTML = `<i class="icon edit"></i> Add Reply`
+
+    field.append(replyBtn)
+    const backBtn = document.createElement('button')
+    backBtn.className = 'ui red button'
+    backBtn.innerText = 'Back'
+    field.append(backBtn)
+
+
+
   }
 
   // end of single fetch area
 
 reportIndexDiv.addEventListener("click", (e)=> {
-  if (e.target.innerText === 'Submit Comment'){
-    parentNode = e.target.parentNode
-    newComment = parentNode.querySelector('#textarea')
-    newCommentPost = {comment: newComment.value, user_id: USERID, report_id: REPORTID}
+    if (e.target.innerText === 'Add Reply'){
+      const textField = e.target.parentNode
+      const text = textField.firstElementChild.value
+      console.log(text)
+      console.log(REPORTID)
+       newCommentPost = {comment: text, user_id: USERID, report_id: REPORTID}
+       console.log(newCommentPost)
+  // if (e.target.innerText === 'Submit Comment'){
+    // parentNode = e.target.parentNode
+    // newComment = parentNode.querySelector('#textarea')
+    // newCommentPost = {comment: newComment.value, user_id: USERID, report_id: REPORTID}
     postComment(newCommentPost)
-    const commentUl = document.getElementById('commentUl')
-    parentNode.appendChild(commentUl)
-    commentLi = document.createElement('li')
-    commentLi.innerText= newComment.value
-    commentUl.appendChild(commentLi)
-    newComment.value = ''
+    fetchOneReport(REPORTID)
+    // fetchOneReport(REPORTID)
+    // const commentUl = document.getElementById('commentUl')
+    // parentNode.appendChild(commentUl)
+    // commentLi = document.createElement('li')
+    // commentLi.innerText= newComment.value
+    // commentUl.appendChild(commentLi)
+    // newComment.value = ''
   }
+
 })
 
 
