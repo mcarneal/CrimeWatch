@@ -359,7 +359,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const showDiv = document.createElement('div')
     showDiv.innerHTML = `
     <h4>Description: ${report.description}</h4>
-    <a>Contact: ${report.user.email}</a><br><br>
+    <p>Contact: <a href="mailto:${report.user.email}">${report.user.email}</a></p><br><br>
     Add Comment:
     `
     const textFieldInput = document.createElement('textarea')
