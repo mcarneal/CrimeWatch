@@ -453,7 +453,7 @@ reportIndexDiv.addEventListener("click", (e)=> {
   const deleteReport = (id) => {
     fetch(`http://localhost:3000/api/v1/reports/${id}`,{
       method: 'DELETE'
-    } )
+    } ).then(()=> loadReports(reportDivUl))
   }
 
 
