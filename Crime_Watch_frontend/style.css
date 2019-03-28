@@ -1,7 +1,7 @@
 #mapid {
   height: 800px;
   float: left;
-  width: 50%;
+  width: 48%;
   border-radius: 3%;
  }
 
@@ -18,7 +18,7 @@ h1 {
 #report-index {
   height: 800px;
   float: left;
-  width: 50%;
+  width: 52%;
   border-radius: 3%;
   background-color: grey;
 }
@@ -42,4 +42,12 @@ h1 {
   padding: 10px;
 
 
+}
+
+#nextBtn {
+  visibility: visible;
+}
+
+#nextBtn {
+  visibility: visible;
 }

@@ -15,7 +15,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     reports.forEach(report => {
       USERREPORTIDS.push(report.id)
     })
-    console.log(USERREPORTIDS)
     return USERREPORTIDS
   }
 
@@ -32,7 +31,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const loginField = createElement("input")
     const loginBtn = createElement("button")
     loginField.id = "login-field"
-    loginField.value = '     Enter username'
+    loginField.value = ''
     loginBtn.id = 'login-btn'
     loginBtn.innerText = 'login'
     loginDiv.appendChild(loginField)
@@ -64,6 +63,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     /// end of LoadInterface
   }
+  const addNextBackBtns = () => {
+    const reportIndexDiv = document.getElementById('report-index')
+    let nextBtn = document.createElement('button')
+    nextBtn.innerText = '->'
+    nextBtn.id = 'nextBtn'
+    let backBtn = document.createElement('button')
+    backBtn.innerText = '<-'
+    backBtn.id = 'prevBtn'
+    reportIndexDiv.append(backBtn)
+    reportIndexDiv.append(nextBtn)
+  }
 
   const loadUserInterface = () => {
   const row = document.querySelector(".row")
@@ -81,6 +91,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let testMarker
     let inputField = document.getElementById('report-index')
     let mymap = L.map('mapid').setView([40.70547963400777, -74.01334879919888], 13);
+
+
+    addNextBackBtns()
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -197,12 +210,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     element.innerHTML = ''
     return fetch('http://localhost:3000/api/v1/reports')
     .then(res => res.json())
-    .then(json => renderReportToUi(json, element))
+    .then(json => renderReportToUi(json.slice(start,end), element))
   }
 
   const renderReportToUi = (reports, element) => {
     const uiCardsDiv = document.createElement('div')
-    console.log(uiCardsDiv)
     uiCardsDiv.className = "ui cards"
     element.append(uiCardsDiv)
     reports.forEach(report => {
@@ -219,7 +231,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
       reportBtn.className = 'detailsBtn'
-      let reportLi = document.createElement('li')
+
       // reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
 
       // const uiCardsDiv = document.createElement('div')
@@ -284,16 +296,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
         // reportLi.append(reportBtn)
         // userListDiv.append(reportLi)
         // element.append(userListDiv)
-}
+      }
     })
   }
 
+  let start = 0
+  let end = 10
+  // const loadTen = () => {
+  //
+  // }
+
+
   reportIndexDiv.addEventListener('click', (e) => {
+    // let start = 0
+    // let end = 9
     if (e.target.className === 'detailsBtn') {
+     const nextBtn = document.getElementById('nextBtn')
+     const prevBtn = document.getElementById('prevBtn')
+     nextBtn.style.visibility = 'hidden'
+     prevBtn.style.visibility = 'hidden'
      let reportId = parseInt(e.target.id)
      fetchOneReport(reportId)
-
-    }
+   } else if (e.target.innerText === '->') {
+     start += 10
+     end += 10
+     console.log(start);
+     console.log(end);
+     loadReports(reportDivUl)
+   } else if (e.target.innerText === '<-') {
+      if (start > 0) {
+        start -= 10
+        end -= 10
+        console.log(start);
+        console.log(end);
+        loadReports(reportDivUl)
+      }
+   }
   })
 
   // functions for grabbing a single report from the UL div
@@ -342,7 +380,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     report.comments.forEach(comment => {
-      console.log(comment)
       commentLi = document.createElement('li')
       commentLi.innerText= comment.comment
       commentsUl.appendChild(commentLi)
@@ -357,9 +394,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 reportIndexDiv.addEventListener("click", (e)=> {
   if (e.target.innerText === 'Submit Comment'){
     parentNode = e.target.parentNode
-    console.log(parentNode)
     newComment = parentNode.querySelector('#textarea')
-    console.log(USERID, REPORTID, newComment.value)
     newCommentPost = {comment: newComment.value, user_id: USERID, report_id: REPORTID}
     postComment(newCommentPost)
     const commentUl = document.getElementById('commentUl')
@@ -392,7 +427,11 @@ reportIndexDiv.addEventListener("click", (e)=> {
 
   reportIndexDiv.addEventListener("click", (e) => {
     if (e.target.innerText === 'Back'){
+      const nextBtn = document.getElementById('nextBtn')
+      const prevBtn = document.getElementById('prevBtn')
       loadReports(reportDivUl)
+      nextBtn.style.visibility = 'visible'
+      prevBtn.style.visibility = 'visible'
     }
   })
 
@@ -401,7 +440,6 @@ reportIndexDiv.addEventListener("click", (e)=> {
 
   reportIndexDiv.addEventListener('click', (e) => {
     if(e.target.innerText === 'Delete'){
-        console.log(e.target.parentNode.parentNode)
         let child = e.target
         let parent = e.target.parentNode.parentNode
         let id = parseInt(e.target.id)
