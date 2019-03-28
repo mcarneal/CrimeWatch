@@ -25,6 +25,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const loginDiv = document.querySelector(".login")
     const welcomeBanner = document.getElementById('welcome-banner')
     let reportIndexDiv = document.createElement('div')
+    // const fieldDiv = document.createElement('div')
+    loginDiv.className = "field"
     const createElement = (e) => {
       return document.createElement(e)
     }
@@ -32,10 +34,26 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const loginBtn = createElement("button")
     loginField.id = "login-field"
     loginField.value = ''
+    loginField.placeholder = 'enter email...'
+    loginField.type = 'email'
     loginBtn.id = 'login-btn'
-    loginBtn.innerText = 'login'
+    loginBtn.innerText = 'Login'
+    loginBtn.className = "ui submit button"
     loginDiv.appendChild(loginField)
     loginDiv.appendChild(loginBtn)
+
+
+//     <div class="ui form error">
+//   <div class="field">
+//     <label>E-mail</label>
+//     <input type="email" placeholder="joe@schmoe.com">
+//   </div>
+//   <div class="ui error message">
+//     <div class="header">Action Forbidden</div>
+//     <p>You can only sign up for an account once with a given e-mail address.</p>
+//   </div>
+//   <div class="ui submit button">Submit</div>
+// </div>
 
 
     loginBtn.addEventListener("click", (e)=>{
@@ -126,6 +144,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const renderReport = (reports) => {
       reports.forEach(report => {
         let marker = L.marker([report.lat, report.lng]).addTo(mymap)
+        marker._icon.id = report.id
         marker.bindPopup(`${report.description} <br> Please Contact: ${report.user.email}`)
       })
     }
@@ -239,14 +258,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // element.append(uiCardsDiv)
       uiCardsDiv.innerHTML +=
       `
-        <div class="card">
-          <div class="content">
-          <div class="header">${report.user.email}</div>
-          <div class="description">
+        <div class="card" id=${report.id}>
+          <div class="content" id=${report.id}>
+          <div class="header" id=${report.id}>${report.user.email}</div>
+          <div class="description" id=${report.id}>
           ${report.description}
           </div>
         </div>
-        <div class="ui bottom attached button">
+        <div class="ui bottom attached button" id=${report.id}>
           <button id=${report.id} class='detailsBtn'>See More Details...</button>
           <button id=${report.id} class='delete-btn'>Delete</button>
         </div>
@@ -274,14 +293,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // element.append(uiCardsDiv)
       uiCardsDiv.innerHTML +=
       `
-        <div class="card">
-          <div class="content">
-          <div class="header">${report.user.email}</div>
-          <div class="description">
+        <div class="card" id=${report.id}>
+          <div class="content" id=${report.id}>
+          <div class="header" id=${report.id}>${report.user.email}</div>
+          <div class="description" id=${report.id}>
           ${report.description}
           </div>
         </div>
-        <div class="ui bottom attached button">
+        <div class="ui bottom attached button" id=${report.id}>
           <button id=${report.id} class='detailsBtn'>See More Details...</button>
           </div>
         </div>
@@ -306,6 +325,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
   //
   // }
 
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.parentNode.className === 'card' || e.target.parentNode.className === 'content') {
+      const icon = document.getElementById(e.target.id)
+      icon.src = 'https://i.pinimg.com/originals/d9/7f/ea/d97feac57bebf6007994f6a6286d005b.png';
+      console.log(icon.style);
+      e.target.addEventListener('mouseleave', (e) => {
+          const icon = document.getElementById(e.target.id)
+          icon.src = 'https://i.imgur.com/WANnswn.png';
+
+     })
+    }
+  })
 
   reportIndexDiv.addEventListener('click', (e) => {
     // let start = 0
