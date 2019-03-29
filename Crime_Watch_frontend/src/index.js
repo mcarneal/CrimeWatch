@@ -85,6 +85,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     frontBackDiv.append(backBtn)
     frontBackDiv.append(nextBtn)
     reportIndexDiv.append(frontBackDiv)
+    backBtn.className = 'ui blue button'
+    nextBtn.className = 'ui blue button'
   }
 
   const loadUserInterface = () => {
