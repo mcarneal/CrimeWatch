@@ -75,10 +75,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
   const addNextBackBtns = () => {
     const reportIndexDiv = document.getElementById('report-index')
     let nextBtn = document.createElement('button')
-    nextBtn.innerText = '->'
+    nextBtn.innerText = '-->'
     nextBtn.id = 'nextBtn'
     let backBtn = document.createElement('button')
-    backBtn.innerText = '<-'
+    backBtn.innerText = '<--'
     backBtn.id = 'prevBtn'
     reportIndexDiv.append(backBtn)
     reportIndexDiv.append(nextBtn)
@@ -260,18 +260,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </div>
         </div>
         <div class="ui bottom attached button" id=${report.id}>
-          <button id=${report.id} class='detailsBtn'>ui green button...</button>
-          <button id=${report.id} class='delete-btn'>Delete</button>
+          <button id=${report.id} class='detailsBtn ui green button'>ui green button...</button>
+          <button id=${report.id} class='delete-btn ui red button'>Delete</button>
         </div>
         </div>
       `
-        // element.appendChild(reportLi)
-        // reportLi.innerHTML+=`<br>`
-        // reportLi.append(reportBtn)
-        // reportLi.innerHTML+=`<br>`
-        // reportLi.append(deleteBtn)
-        // userListDiv.append(reportLi)
-        // element.append(userListDiv)
+
     } else {
       console.log(uiCardsDiv)
       const reportBtn = document.createElement("button")
