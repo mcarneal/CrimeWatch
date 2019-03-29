@@ -1,3 +1,17 @@
+.main-container{
+  position: relative;
+}
+
+.globe-container{
+  position: fixed;
+}
+
+/* .content-container{
+  position: absolute;
+  top:0;
+  z-index: 1;
+} */
+
 #mapid {
   height: 800px;
   float: left;
@@ -13,20 +27,41 @@ h1 {
   float: left;
   margin-top: 50%;
 }
+.field {
+  position: relative;
 
+}
+#login-field {
+  position: fixed;
+}
+#login-btn {
+  position: relative;
+}
 
 #report-index {
+  margin-left: 5%;
   height: 800px;
   float: left;
-  width: 52%;
+  width: 45%;
   border-radius: 3%;
   background-color: grey;
+  opacity: 0.8;
+
+}
+
+#report-ul{
+  display: flex;
+ flex-flow: wrap;
+ text-align: center;
+ width: 80%;
+ margin-left: 10%;
 }
 
 .row:after {
   content: "";
   display: table;
   clear: both;
+  /* position: absolute; */
 }
 
 #login-field {

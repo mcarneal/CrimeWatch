@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', (event) => {
 
+
   let USEROBJECT
   let USERNAME
   let USERID
@@ -8,6 +9,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   let NEWCOMMENT
   let USERREPORTIDS = []
   const uiCardsDiv = document.createElement('div')
+
 
 
 
@@ -23,6 +25,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // start of loadinterface
     const USERURL = 'http://localhost:3000/api/v1/users'
     const loginDiv = document.querySelector(".login")
+    loginDiv.scrollIntoView()
     const welcomeBanner = document.getElementById('welcome-banner')
     let reportIndexDiv = document.createElement('div')
     // const fieldDiv = document.createElement('div')
@@ -41,19 +44,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     loginBtn.className = "ui submit button"
     loginDiv.appendChild(loginField)
     loginDiv.appendChild(loginBtn)
-
-
-//     <div class="ui form error">
-//   <div class="field">
-//     <label>E-mail</label>
-//     <input type="email" placeholder="joe@schmoe.com">
-//   </div>
-//   <div class="ui error message">
-//     <div class="header">Action Forbidden</div>
-//     <p>You can only sign up for an account once with a given e-mail address.</p>
-//   </div>
-//   <div class="ui submit button">Submit</div>
-// </div>
 
 
     loginBtn.addEventListener("click", (e)=>{
@@ -79,8 +69,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
       }).then(res => res.json())
     }
 
-    /// end of LoadInterface
+
   }
+
   const addNextBackBtns = () => {
     const reportIndexDiv = document.getElementById('report-index')
     let nextBtn = document.createElement('button')
@@ -94,7 +85,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 
   const loadUserInterface = () => {
-  const row = document.querySelector(".row")
+    const contentContainer = document.querySelector('.content-container')
+    contentContainer.scrollIntoView()
+    const row = document.querySelector(".row")
     const reportIndexDiv = document.createElement('div')
     reportIndexDiv.id = 'report-index'
     const reportDivUl = document.createElement("ul")
@@ -109,6 +102,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let testMarker
     let inputField = document.getElementById('report-index')
     let mymap = L.map('mapid').setView([40.70547963400777, -74.01334879919888], 13);
+
 
 
     addNextBackBtns()
@@ -249,7 +243,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       deleteBtn.id = report.id
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
-      reportBtn.className = 'detailsBtn'
+      reportBtn.className = 'ui olive button'
 
       // reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
 
@@ -266,7 +260,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </div>
         </div>
         <div class="ui bottom attached button" id=${report.id}>
-          <button id=${report.id} class='detailsBtn'>See More Details...</button>
+          <button id=${report.id} class='detailsBtn'>ui green button...</button>
           <button id=${report.id} class='delete-btn'>Delete</button>
         </div>
         </div>
@@ -285,7 +279,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       // userListDiv.className = 'reportDiv'
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
-      reportBtn.className = 'detailsBtn'
+      reportBtn.className = 'ui green button'
       // let reportLi = document.createElement('li')
       // reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
       // const uiCardsDiv = document.createElement('div')
@@ -301,7 +295,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </div>
         </div>
         <div class="ui bottom attached button" id=${report.id}>
-          <button id=${report.id} class='detailsBtn'>See More Details...</button>
+          <button id=${report.id} class='ui green button'>See More Details...</button>
           </div>
         </div>
       `
@@ -341,7 +335,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
   reportIndexDiv.addEventListener('click', (e) => {
     // let start = 0
     // let end = 9
-    if (e.target.className === 'detailsBtn') {
+    if (e.target.className === 'ui green button') {
      const nextBtn = document.getElementById('nextBtn')
      const prevBtn = document.getElementById('prevBtn')
      nextBtn.style.visibility = 'hidden'
@@ -534,6 +528,7 @@ reportIndexDiv.addEventListener("click", (e)=> {
 // findReportIds(USEROBJECT.reports)
 
 /// load user interface ends right here!!!!!!!!!!!!!!!!!!!!!
+
 }
 
 loadLoginInterface()
