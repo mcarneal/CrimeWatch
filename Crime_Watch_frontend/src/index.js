@@ -289,7 +289,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </div>
         </div>
         <div class="ui bottom attached button" id=${report.id}>
-          <button id=${report.id} class='ui green button'>See More Details...</button>
+          <button id=${report.id} class='detailsBtn ui green button'>See More Details...</button>
           </div>
         </div>
       `
@@ -329,20 +329,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
   reportIndexDiv.addEventListener('click', (e) => {
     // let start = 0
     // let end = 9
-    if (e.target.className === 'ui green button') {
+    console.log(e.target.className);
+    if (e.target.className === 'detailsBtn ui green button') {
      const nextBtn = document.getElementById('nextBtn')
      const prevBtn = document.getElementById('prevBtn')
      nextBtn.style.visibility = 'hidden'
      prevBtn.style.visibility = 'hidden'
      let reportId = parseInt(e.target.id)
      fetchOneReport(reportId)
-   } else if (e.target.innerText === '->') {
+   } else if (e.target.innerText === '-->') {
      start += 10
      end += 10
      console.log(start);
      console.log(end);
      loadReports(reportDivUl)
-   } else if (e.target.innerText === '<-') {
+   } else if (e.target.innerText === '<--') {
       if (start > 0) {
         start -= 10
         end -= 10
