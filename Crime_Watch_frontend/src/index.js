@@ -260,7 +260,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </div>
         </div>
         <div class="ui bottom attached button" id=${report.id}>
-          <button id=${report.id} class='detailsBtn ui green button'>ui green button...</button>
+          <button id=${report.id} class='detailsBtn ui green button'>See More Details...</button>
           <button id=${report.id} class='delete-btn ui red button'>Delete</button>
         </div>
         </div>
