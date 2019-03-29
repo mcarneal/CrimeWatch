@@ -24,6 +24,21 @@ h1 {
   text-align: center;
 }
 
+div.ui.cards {
+  margin-left: 43px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+
+}
+
+#prevBtn {
+  margin-left: -1.2%
+}
+
+#nextBtn {
+  margin-left: 0.5%
+}
+
 #back-button {
   float: left;
   margin-top: 50%;
@@ -58,7 +73,6 @@ h1 {
   float: left;
   width: 45%;
   border-radius: 3%;
-  background-color: grey;
   opacity: 0.8;
   position: relative;
 
@@ -72,6 +86,15 @@ h1 {
  margin-left: 10%;
  position: absolute;
 }
+
+#frontBack {
+  text-align: center;
+  position: relative;
+  margin-top: 781.5px;
+  margin-left: 2px;
+}
+
+
 
 .row:after {
   content: "";

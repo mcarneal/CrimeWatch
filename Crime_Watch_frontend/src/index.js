@@ -41,7 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     loginField.type = 'email'
     loginBtn.id = 'login-btn'
     loginBtn.innerText = 'Login'
-    loginBtn.className = "ui submit button"
+    loginBtn.className = "ui blue button"
     loginDiv.appendChild(loginField)
     loginDiv.appendChild(loginBtn)
 
@@ -74,14 +74,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   const addNextBackBtns = () => {
     const reportIndexDiv = document.getElementById('report-index')
+    const frontBackDiv = document.createElement('div')
+    frontBackDiv.id = 'frontBack'
     let nextBtn = document.createElement('button')
     nextBtn.innerText = '-->'
     nextBtn.id = 'nextBtn'
     let backBtn = document.createElement('button')
     backBtn.innerText = '<--'
     backBtn.id = 'prevBtn'
-    reportIndexDiv.append(backBtn)
-    reportIndexDiv.append(nextBtn)
+    frontBackDiv.append(backBtn)
+    frontBackDiv.append(nextBtn)
+    reportIndexDiv.append(frontBackDiv)
   }
 
   const loadUserInterface = () => {
@@ -189,7 +192,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     })
 
   const appendNewReport = (descriptionInput, reportDivUl) => {
-    console.log(NEWREPORTID)
     const reportBtn = document.createElement("button")
     const deleteBtn = document.createElement("button")
     deleteBtn.id = NEWREPORTID
@@ -215,8 +217,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   const findLastReport = (report) => {
     NEWREPORTID = report[0].id + 1
-    console.log(report[0].id, 'is the latest report ID')
-    console.log(NEWREPORTID, 'is the soon to be report')
+
   }
 
   const loadReports = (element) => {
@@ -231,7 +232,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     uiCardsDiv.className = "ui cards"
     element.append(uiCardsDiv)
     reports.forEach(report => {
-      console.log(uiCardsDiv)
+
       if (USERID === report.user.id){
       const reportBtn = document.createElement("button")
       const deleteBtn = document.createElement("button")
@@ -267,7 +268,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       `
 
     } else {
-      console.log(uiCardsDiv)
+
       const reportBtn = document.createElement("button")
       // const userListDiv = document.createElement("div")
       // userListDiv.className = 'reportDiv'
@@ -317,7 +318,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     if (e.target.parentNode.className === 'card' || e.target.parentNode.className === 'content') {
       const icon = document.getElementById(e.target.id)
       icon.src = 'https://i.pinimg.com/originals/d9/7f/ea/d97feac57bebf6007994f6a6286d005b.png';
-      console.log(icon.style);
+
       e.target.addEventListener('mouseleave', (e) => {
           const icon = document.getElementById(e.target.id)
           icon.src = 'https://i.imgur.com/WANnswn.png';
@@ -327,9 +328,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
   })
 
   reportIndexDiv.addEventListener('click', (e) => {
-    // let start = 0
-    // let end = 9
-    console.log(e.target.className);
+
+
     if (e.target.className === 'detailsBtn ui green button') {
      const nextBtn = document.getElementById('nextBtn')
      const prevBtn = document.getElementById('prevBtn')
@@ -340,15 +340,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
    } else if (e.target.innerText === '-->') {
      start += 10
      end += 10
-     console.log(start);
-     console.log(end);
+
      loadReports(reportDivUl)
    } else if (e.target.innerText === '<--') {
       if (start > 0) {
         start -= 10
         end -= 10
-        console.log(start);
-        console.log(end);
+
         loadReports(reportDivUl)
       }
    }
@@ -424,7 +422,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     const field = document.createElement('div')
     field.className = 'field'
-    field.innerHTML = `<textarea>add a comment...`
+    field.innerHTML = `<textarea placeholder='add a comment...'>`
     uiReplyForm.append(field)
 
     const replyBtn = document.createElement('div')
@@ -447,29 +445,18 @@ reportIndexDiv.addEventListener("click", (e)=> {
     if (e.target.innerText === 'Add Reply'){
       const textField = e.target.parentNode
       const text = textField.firstElementChild.value
-      console.log(text)
-      console.log(REPORTID)
+
        newCommentPost = {comment: text, user_id: USERID, report_id: REPORTID}
-       console.log(newCommentPost)
-  // if (e.target.innerText === 'Submit Comment'){
-    // parentNode = e.target.parentNode
-    // newComment = parentNode.querySelector('#textarea')
-    // newCommentPost = {comment: newComment.value, user_id: USERID, report_id: REPORTID}
+
+
     postComment(newCommentPost)
     fetchOneReport(REPORTID)
-    // fetchOneReport(REPORTID)
-    // const commentUl = document.getElementById('commentUl')
-    // parentNode.appendChild(commentUl)
-    // commentLi = document.createElement('li')
-    // commentLi.innerText= newComment.value
-    // commentUl.appendChild(commentLi)
-    // newComment.value = ''
+
   }
 
 })
 
 
-  // event instener to send a post request for a new comment
 
 
 
