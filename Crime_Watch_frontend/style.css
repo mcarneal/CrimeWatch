@@ -73,7 +73,7 @@ div.ui.cards {
   float: left;
   width: 45%;
   border-radius: 3%;
-  opacity: 0.8;
+
   position: relative;
 
 }
@@ -120,4 +120,11 @@ div.ui.cards {
 
 #nextBtn {
   visibility: visible;
+}
+
+
+#uicomments{
+  background-color: rgb(195, 196, 198);
+  border-radius: 3%;
+  padding: 30px;
 }

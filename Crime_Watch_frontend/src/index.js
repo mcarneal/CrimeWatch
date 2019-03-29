@@ -378,11 +378,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
       <h2>Description:</h2>
       <p>${report.description} ... was reported by: ${report.user.email}</p>
     `
-    container.append(descriptionContainer)
+    // container.append(descriptionContainer)
 
     // comments and reply section
     const uiCommentsDiv = document.createElement('div')
     uiCommentsDiv.className = 'ui comments'
+    uiCommentsDiv.id ='uicomments'
+    uiCommentsDiv.append(descriptionContainer)
     container.append(uiCommentsDiv)
     const uiDividingHeader = document.createElement('h3')
     uiDividingHeader.className = 'ui dividing header'
