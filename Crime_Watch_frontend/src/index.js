@@ -41,7 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     loginField.type = 'email'
     loginBtn.id = 'login-btn'
     loginBtn.innerText = 'Login'
-    loginBtn.className = "ui submit button"
+    loginBtn.className = "ui blue button"
     loginDiv.appendChild(loginField)
     loginDiv.appendChild(loginBtn)
 
