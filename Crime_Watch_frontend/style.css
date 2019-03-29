@@ -17,6 +17,7 @@
   float: left;
   width: 48%;
   border-radius: 3%;
+  margin-left: 2%;
  }
 
 h1 {
@@ -32,20 +33,34 @@ h1 {
 
 }
 #login-field {
-  position: fixed;
+  /* position: fixed;
+  text-align: center;
+  margin-left: 50%;
+  margin-right: 50% */
+  display: flex;
+  flex-flow: wrap;
+  text-align: center;
+  width: 15%;
+  height: 30px;
+  margin: auto;
 }
 #login-btn {
+  display: flex;
+  flex-flow: wrap;
+  text-align: center;
   position: relative;
+  margin: auto;
 }
 
 #report-index {
-  margin-left: 5%;
+  margin-left: 3%;
   height: 800px;
   float: left;
   width: 45%;
   border-radius: 3%;
   background-color: grey;
   opacity: 0.8;
+  position: relative;
 
 }
 
@@ -55,6 +70,7 @@ h1 {
  text-align: center;
  width: 80%;
  margin-left: 10%;
+ position: absolute;
 }
 
 .row:after {
@@ -64,11 +80,7 @@ h1 {
   /* position: absolute; */
 }
 
-#login-field {
-  margin-left: 42%;
-  margin-right:46%;
-  padding: 10px;
-}
+
 
 #login-btn{
   margin-left: 48%;
