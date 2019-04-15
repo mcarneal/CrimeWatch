@@ -67,6 +67,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           },
         body: JSON.stringify(id)
       }).then(res => res.json())
+
     }
 
 
@@ -124,6 +125,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let coord = e.latlng;
      lat = coord.lat;
      lng = coord.lng;
+     console.log(coord)
      if (testMarker){
         mymap.removeLayer(testMarker)
      } testMarker = L.marker([lat,lng]).addTo(mymap)
@@ -222,6 +224,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   }
 
+
+
   const loadReports = (element) => {
     element.innerHTML = ''
     return fetch('http://localhost:3000/api/v1/reports')
@@ -246,7 +250,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       deleteBtn.id = report.id
       reportBtn.id = report.id
       reportBtn.innerText = 'See More Details...'
-      reportBtn.className = 'ui olive button'
+      // reportBtn.className = 'ui olive button'
 
       // reportLi.innerText= `${report.description} was reported by: ${report.user.email}`
 

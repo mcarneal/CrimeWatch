@@ -96,6 +96,8 @@ const getData = async () => {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
     const results = await fetch(proxyUrl + 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/617753/globe-points.json');
     data = await results.json();
+    console.log(data)
+    data.countries["England"] = {x: 110, y: 150, name: 'England', country: 'England'}
     return setupScene();
   } catch (error) {
     return alert('Unable to get data');
@@ -176,11 +178,11 @@ const addCamera = () => {
 
 const addControls = () => {
   camera.controls = new OrbitControls(camera.object, canvas);
-  camera.controls.enableKeys = false;
-  camera.controls.enablePan = false;
-  camera.controls.enableZoom = false;
-  camera.controls.enableDamping = false;
-  camera.controls.enableRotate = false;
+  camera.controls.enableKeys = true;
+  camera.controls.enablePan = true;
+  camera.controls.enableZoom = true;
+  camera.controls.enableDamping = true;
+  camera.controls.enableRotate = true;
 
   // Set the initial camera angles to something crazy for the introduction animation
   camera.angles.current.azimuthal = -Math.PI;
